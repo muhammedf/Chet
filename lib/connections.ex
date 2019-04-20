@@ -13,7 +13,8 @@ defmodule Connections do
     child_spec = %{
       id: Client,
       start: {Client, :start_link, [%{socket: con}]},
-      type: :worker
+      type: :worker,
+      restart: :temporary
     }
     {:ok, pid} = DynamicSupervisor.start_child(__MODULE__, child_spec)
     :gen_tcp.controlling_process(con, pid)
