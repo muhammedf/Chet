@@ -12,7 +12,9 @@ defmodule Acceptor do
 
   defp accept_loop(socket) do
     case :gen_tcp.accept(socket) do
-      {:ok, _client} -> accept_loop(socket)
+      {:ok, client} ->
+        Connections.add_connection(client)
+        accept_loop(socket)
       _ -> nil
     end
   end
