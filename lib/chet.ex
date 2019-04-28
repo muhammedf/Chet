@@ -18,8 +18,8 @@ defmodule Chet do
   end
 
   def start(_type, _args) do
+    Acceptor.start(22222)
     children = [
-      Acceptor,
       Connections
     ]
     opts = [strategy: :one_for_one, name: MainSupervisor]

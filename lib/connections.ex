@@ -18,5 +18,6 @@ defmodule Connections do
     }
     {:ok, pid} = DynamicSupervisor.start_child(__MODULE__, child_spec)
     :gen_tcp.controlling_process(con, pid)
+    {:ok, pid}
   end
 end
