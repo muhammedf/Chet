@@ -11,7 +11,13 @@ defmodule Client do
     {:ok, %{socket: socket}}
   end
 
-  def handle_info(_msg, state) do
+  def handle_info(msg, state) do
+    msg |> IO.inspect
+    case msg do
+      {:tcp, _port, text} ->
+        LineProcessor.process(text, state)
+      _ -> nil
+    end
     {:noreply, state}
   end
 
