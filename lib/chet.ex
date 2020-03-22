@@ -20,7 +20,8 @@ defmodule Chet do
   def start(_type, _args) do
     Acceptor.start(22222)
     children = [
-      Connections
+      Connections,
+      UserStorage
     ]
     opts = [strategy: :one_for_one, name: MainSupervisor]
     Supervisor.start_link(children, opts)

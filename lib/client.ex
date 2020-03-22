@@ -8,17 +8,23 @@ defmodule Client do
   def init(init_args) do
     socket = Map.get(init_args, :socket)
     :inet.setopts(socket, active: true)
-    {:ok, %{socket: socket}}
+    {:ok, init_args}
   end
 
   def handle_info(msg, state) do
     msg |> IO.inspect
     case msg do
       {:tcp, _port, text} ->
-        LineProcessor.process(text, state)
-      _ -> nil
+        LineProcessor.process(text, state, self())
+        {:noreply, state}
+      {:update_name, name} ->
+        UserStorage.delete_user(state.name)
+        UserStorage.set_user(name, state.socket)
+        state = %{state | name: name}
+        {:noreply, state}
+      _ ->
+        {:noreply, state}
     end
-    {:noreply, state}
   end
 
   def send_message(msg, socket) do
